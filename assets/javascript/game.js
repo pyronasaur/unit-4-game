@@ -8,32 +8,53 @@ $(document).ready(function(){
 
     var playerChosen = false;
 
+    var targetChosen = false;
+
     var player;
 
-    var enemy;
+    var target;
+
+    var killCount = 0;
     
     //choose player character
     $(".player").on("click", function(){
-        player = $(this).attr("id");
-        $(this).removeClass("enemy");
-        $(this).removeClass("player");
-        var clone = $(this).clone();        
-        $(this).remove();
-        clone.appendTo(charContainer);
+        if(!playerChosen)
+        {
+            player = $(this).attr("id");            
+            var clone = $(this).clone();        
+            $(this).remove();
+            clone.appendTo(charContainer);
+        
 
-        $("div").each(function(index, element){
-            if($(element).hasClass("player"))
-            {
-                $(element).removeClass("player");
-                var clone = $(element).clone();
-                $(element).remove();
-                clone.appendTo(enemyContainer);
-            }            
-        });
-
-        playerChosen = true;
+            $("div").each(function(index, element){
+                if($(element).hasClass("player") && $(element).attr("id")!==player)
+                {
+                    $(element).removeClass("player");
+                    $(element).addClass("enemy");
+                    $(element).css("border-color","red");
+                    var clone = $(element).clone();
+                    $(element).remove();
+                    clone.appendTo(enemyContainer);
+                }            
+            });
+            playerChosen = true;
+        }        
     });
 
-    
+    //select target
+    $(document).on("click", ".enemy", function(){
+        if(playerChosen && !targetChosen)
+        {
+            target = $(this).attr("id");
+            $(this).addClass("target");
+            var clone = $(this).clone();
+            $(this).remove();
+            clone.appendTo(fightContainer);
 
+            targetChosen = true;
+        }
+    });
+
+
+//TODO create objects for each character
 });
